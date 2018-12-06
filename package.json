@@ -1,0 +1,38 @@
+{
+  "name": "workspace-cache",
+  "description": "A build cache for mono repositories, that supports linked dependencies.",
+  "author": "Sune Sloth Simonsen <sune@we-knowhow.dk>",
+  "license": "MIT",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "bin": {
+    "workspace-cache": "./bin/cli.js"
+  },
+  "scripts": {
+    "lint": "eslint . && prettier --check '**/*.js'",
+    "preversion": "npm run lint"
+  },
+  "dependencies": {
+    "@transformation/core": "1.12.3",
+    "@transformation/glob": "1.14.0",
+    "delete-empty": "3.0.0",
+    "fs-extra": "8.1.0",
+    "md5-file": "4.0.0",
+    "mem": "6.0.1",
+    "meow": "5.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.0.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-config-standard": "^14.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-mocha": "^6.0.0",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "prettier": "~1.19.1"
+  },
+  "engines": {
+    "node": ">=10"
+  }
+}
