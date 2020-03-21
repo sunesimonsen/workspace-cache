@@ -17,6 +17,7 @@ npm install workspace-cache
 
 ```
 Usage
+
   $ workspace-cache <command> [flags] <cache-dir>
 
 Commands
@@ -39,6 +40,19 @@ Commands
 
     --older-than n    will clean files older than n days,
                       n must be between 0 and 120 and defaults to 30
+
+Examples
+
+  workspace-cache list /tmp/workspace-cache
+  workspace-cache list --filter cached /tmp/workspace-cache
+  workspace-cache list --filter not-cached /tmp/workspace-cache
+
+  workspace-cache write /tmp/workspace-cache
+
+  workspace-cache read /tmp/workspace-cache
+
+  workspace-cache clean /tmp/workspace-cache
+  workspace-cache clean --older-than 3 /tmp/workspace-cache
 ```
 
 ## MIT License
