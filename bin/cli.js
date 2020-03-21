@@ -4,6 +4,7 @@ const { main } = require("..");
 
 const cli = meow(`
   Usage
+
     $ workspace-cache <command> [flags] <cache-dir>
 
   Commands
@@ -26,16 +27,29 @@ const cli = meow(`
 
       --older-than n    will clean files older than n days,
                         n must be between 0 and 120 and defaults to 30
+
+  Examples
+
+    workspace-cache list /tmp/workspace-cache
+    workspace-cache list --filter cached /tmp/workspace-cache
+    workspace-cache list --filter not-cached /tmp/workspace-cache
+
+    workspace-cache write /tmp/workspace-cache
+
+    workspace-cache read /tmp/workspace-cache
+
+    workspace-cache clean /tmp/workspace-cache
+    workspace-cache clean --older-than 3 /tmp/workspace-cache
 `);
 
 const [command, ...args] = cli.input;
 
-const commands = ["list", "write", "read", "clean"];
-
-if (!commands.includes(command) || args.length !== 1) {
-  console.log(cli.help);
-  process.exit(1);
-}
+const ensure = condition => {
+  if (!condition) {
+    console.log(cli.help);
+    process.exit(1);
+  }
+};
 
 const defaults = {
   filter: "all",
@@ -45,7 +59,15 @@ const defaults = {
 
 const flags = cli.flags;
 
-main(command, args, { ...defaults, ...flags }).catch(e => {
+const options = { ...defaults, ...flags };
+
+ensure(["list", "write", "read", "clean"].includes(command));
+ensure(args.length === 1);
+ensure(options.olderThan >= 0 && options.olderThan <= 120);
+ensure(["all", "not-cached", "cached"].includes(options.filter));
+ensure(["all", "shared", "root"].includes(options.hierarchy));
+
+main(command, args, options).catch(e => {
   console.error(e.message);
   console.error(e.stack);
   process.exit(1);
