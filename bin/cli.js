@@ -67,7 +67,9 @@ ensure(options.olderThan >= 0 && options.olderThan <= 120);
 ensure(["all", "not-cached", "cached"].includes(options.filter));
 ensure(["all", "shared", "root"].includes(options.hierarchy));
 
-main(command, args, options).catch(e => {
+const cwd = process.cwd();
+
+main(cwd, command, args, options).catch(e => {
   console.error(e.message);
   console.error(e.stack);
   process.exit(1);
