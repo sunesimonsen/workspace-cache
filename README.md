@@ -1,4 +1,6 @@
-## workspace-cache
+## workspace-cache 
+
+[![Build Status](https://travis-ci.org/sunesimonsen/workspace-cache.svg?branch=master)](https://travis-ci.org/sunesimonsen/workspace-cache)
 
 A command line utility to manage a workspace cache for Yarn workspaces or Lerna.
 
