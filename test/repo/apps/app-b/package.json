@@ -1,0 +1,20 @@
+{
+  "name": "app-b",
+  "version": "1.0.0",
+  "description": "Test application",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "files": [
+    "./dist/index.js"
+  ],
+  "scripts": {
+    "build": "rm -rf dist; mkdir -p dist; buble index.js > dist/index.js"
+  },
+  "dependencies": {
+    "package-b": "1.0.0"
+  },
+  "devDependencies": {
+    "buble": "^0.20.0"
+  }
+}

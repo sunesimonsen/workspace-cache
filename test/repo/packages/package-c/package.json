@@ -1,0 +1,16 @@
+{
+  "name": "package-c",
+  "version": "1.0.0",
+  "description": "Test package",
+  "main": "./dist/index.js",
+  "files": [
+    "./dist/index.js"
+  ],
+  "scripts": {
+    "build": "rm -rf dist; mkdir -p dist; buble index.js > dist/index.js"
+  },
+  "private": true,
+  "devDependencies": {
+    "buble": "^0.20.0"
+  }
+}

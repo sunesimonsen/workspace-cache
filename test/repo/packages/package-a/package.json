@@ -1,0 +1,10 @@
+{
+  "name": "package-a",
+  "version": "1.0.0",
+  "description": "Test package",
+  "main": "index.js",
+  "private": true,
+  "dependencies": {
+    "package-c": "1.0.0"
+  }
+}
