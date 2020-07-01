@@ -1,0 +1,13 @@
+{
+  "name": "repo",
+  "version": "1.0.0",
+  "description": "Test mono repository",
+  "main": "index.js",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/*",
+      "apps/*"
+    ]
+  }
+}
