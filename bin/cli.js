@@ -1,11 +1,16 @@
 #!/usr/bin/env node
 const meow = require("meow");
 const { main } = require("..");
+const os = require("os");
+const cpus = os.cpus().length;
 
 const cli = meow(`
   Usage
 
     $ workspace-cache <command> [flags] <cache-dir>
+
+  Flags
+    --concurrency       how many threads to use, defaults to 2 * CPU's
 
   Commands
 
@@ -55,6 +60,7 @@ const defaults = {
   filter: "all",
   hierarchy: "all",
   olderThan: 30,
+  concurrency: 2 * cpus,
 };
 
 const flags = cli.flags;
@@ -63,7 +69,12 @@ const options = { ...defaults, ...flags };
 
 ensure(["list", "write", "read", "clean"].includes(command));
 ensure(args.length === 1);
-ensure(options.olderThan >= 0 && options.olderThan <= 120);
+ensure(
+  typeof options.olderThan === "number" &&
+    options.olderThan >= 0 &&
+    options.olderThan <= 120
+);
+ensure(typeof options.concurrency === "number" && options.concurrency >= 1);
 ensure(["all", "not-cached", "cached"].includes(options.filter));
 ensure(["all", "shared", "root"].includes(options.hierarchy));
 

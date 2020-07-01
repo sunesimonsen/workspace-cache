@@ -20,6 +20,9 @@ Usage
 
   $ workspace-cache <command> [flags] <cache-dir>
 
+Flags
+  --concurrency       how many threads to use, defaults to 2 * CPU's
+
 Commands
 
   list                list the packages in dependency order

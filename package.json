@@ -10,11 +10,12 @@
   },
   "scripts": {
     "lint": "eslint . && prettier --check '**/*.js'",
+    "test": "mocha",
     "preversion": "npm run lint"
   },
   "dependencies": {
-    "@transformation/core": "1.12.3",
-    "@transformation/glob": "1.14.0",
+    "@transformation/core": "^1.27.1",
+    "@transformation/glob": "^1.27.1",
     "delete-empty": "3.0.0",
     "fs-extra": "8.1.0",
     "md5-file": "4.0.0",
@@ -30,7 +31,11 @@
     "eslint-plugin-node": "^10.0.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
-    "prettier": "~1.19.1"
+    "mocha": "^8.0.1",
+    "prettier": "~1.19.1",
+    "sinon": "^9.0.2",
+    "unexpected": "^11.14.0",
+    "unexpected-sinon": "^10.11.2"
   },
   "engines": {
     "node": ">=10"
