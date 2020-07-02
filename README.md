@@ -20,10 +20,11 @@ npm install workspace-cache
 ```
 Usage
 
-  $ workspace-cache <command> [flags] <cache-dir>
+  $ workspace-cache <command> [flags]
 
 Flags
   --concurrency       how many threads to use, defaults to 2 * CPU's
+  --cache             the cache directory, defaults to .workspace-cache
 
 Commands
 
@@ -48,16 +49,20 @@ Commands
 
 Examples
 
-  workspace-cache list /tmp/workspace-cache
-  workspace-cache list --filter cached /tmp/workspace-cache
-  workspace-cache list --filter not-cached /tmp/workspace-cache
+  workspace-cache list
+  workspace-cache list --filter cached
+  workspace-cache list --filter not-cached
 
-  workspace-cache write /tmp/workspace-cache
+  workspace-cache run test
+  workspace-cache run test --filter cached
+  workspace-cache run test --filter not-cached
 
-  workspace-cache read /tmp/workspace-cache
+  workspace-cache write
 
-  workspace-cache clean /tmp/workspace-cache
-  workspace-cache clean --older-than 3 /tmp/workspace-cache
+  workspace-cache read
+
+  workspace-cache clean
+  workspace-cache clean --older-than 3
 ```
 
 ## MIT License

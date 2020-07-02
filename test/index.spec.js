@@ -41,7 +41,7 @@ describe("workspace-cache", () => {
   describe("list", () => {
     describe("--filter all", () => {
       beforeEach(async () => {
-        await main(cwd, "list", [cacheWithCascadingChange], {
+        await main(cwd, cacheWithCascadingChange, "list", [], {
           concurrency: 1,
           filter: "all",
           hierarchy: "all",
@@ -62,7 +62,7 @@ describe("workspace-cache", () => {
     describe("--filter cached", () => {
       describe("on a cache with cascading changes", () => {
         beforeEach(async () => {
-          await main(cwd, "list", [cacheWithCascadingChange], {
+          await main(cwd, cacheWithCascadingChange, "list", [], {
             concurrency: 1,
             filter: "cached",
             hierarchy: "all",
@@ -76,7 +76,7 @@ describe("workspace-cache", () => {
 
       describe("on a cache with partial cascading changes", () => {
         beforeEach(async () => {
-          await main(cwd, "list", [cacheWithPartialCascadingChange], {
+          await main(cwd, cacheWithPartialCascadingChange, "list", [], {
             concurrency: 1,
             filter: "cached",
             hierarchy: "all",
@@ -94,7 +94,7 @@ describe("workspace-cache", () => {
 
       describe("on a cache with a single change", () => {
         beforeEach(async () => {
-          await main(cwd, "list", [cacheWithSingleChange], {
+          await main(cwd, cacheWithSingleChange, "list", [], {
             concurrency: 1,
             filter: "cached",
             hierarchy: "all",
@@ -113,7 +113,7 @@ describe("workspace-cache", () => {
 
       describe("on a cache that is in-sync", () => {
         beforeEach(async () => {
-          await main(cwd, "list", [cacheInSync], {
+          await main(cwd, cacheInSync, "list", [], {
             concurrency: 1,
             filter: "cached",
             hierarchy: "all",
@@ -135,7 +135,7 @@ describe("workspace-cache", () => {
     describe("--filter not-cached", () => {
       describe("on a cache with cascading changes", () => {
         beforeEach(async () => {
-          await main(cwd, "list", [cacheWithCascadingChange], {
+          await main(cwd, cacheWithCascadingChange, "list", [], {
             concurrency: 1,
             filter: "not-cached",
             hierarchy: "all",
@@ -155,7 +155,7 @@ describe("workspace-cache", () => {
 
       describe("on a cache with partial cascading changes", () => {
         beforeEach(async () => {
-          await main(cwd, "list", [cacheWithPartialCascadingChange], {
+          await main(cwd, cacheWithPartialCascadingChange, "list", [], {
             concurrency: 1,
             filter: "not-cached",
             hierarchy: "all",
@@ -172,7 +172,7 @@ describe("workspace-cache", () => {
 
       describe("on a cache with a single change", () => {
         beforeEach(async () => {
-          await main(cwd, "list", [cacheWithSingleChange], {
+          await main(cwd, cacheWithSingleChange, "list", [], {
             concurrency: 1,
             filter: "not-cached",
             hierarchy: "all",
@@ -188,7 +188,7 @@ describe("workspace-cache", () => {
 
       describe("on a cache that is in-sync", () => {
         beforeEach(async () => {
-          await main(cwd, "list", [cacheInSync], {
+          await main(cwd, cacheInSync, "list", [], {
             concurrency: 1,
             filter: "not-cached",
             hierarchy: "all",
@@ -203,7 +203,7 @@ describe("workspace-cache", () => {
 
     describe("--hierarchy shared", () => {
       beforeEach(async () => {
-        await main(cwd, "list", [cacheInSync], {
+        await main(cwd, cacheInSync, "list", [], {
           concurrency: 1,
           filter: "all",
           hierarchy: "shared",
@@ -221,7 +221,7 @@ describe("workspace-cache", () => {
 
     describe("--hierarchy root", () => {
       beforeEach(async () => {
-        await main(cwd, "list", [cacheInSync], {
+        await main(cwd, cacheInSync, "list", [], {
           concurrency: 1,
           filter: "all",
           hierarchy: "root",
@@ -238,7 +238,7 @@ describe("workspace-cache", () => {
 
     describe("--filter cached --hierarchy shared", () => {
       beforeEach(async () => {
-        await main(cwd, "list", [cacheWithPartialCascadingChange], {
+        await main(cwd, cacheWithPartialCascadingChange, "list", [], {
           concurrency: 1,
           filter: "cached",
           hierarchy: "shared",
@@ -261,7 +261,7 @@ describe("workspace-cache", () => {
 
     describe("on a cache with cascading changes", () => {
       beforeEach(async () => {
-        await main(tmp, "read", [cacheWithCascadingChange], {
+        await main(tmp, cacheWithCascadingChange, "read", [], {
           concurrency: 1,
         });
       });
@@ -273,7 +273,7 @@ describe("workspace-cache", () => {
 
     describe("on a cache with partial cascading changes", () => {
       beforeEach(async () => {
-        await main(tmp, "read", [cacheWithPartialCascadingChange], {
+        await main(tmp, cacheWithPartialCascadingChange, "read", [], {
           concurrency: 1,
         });
       });
@@ -295,7 +295,7 @@ describe("workspace-cache", () => {
 
     describe("on a cache with a single change", () => {
       beforeEach(async () => {
-        await main(tmp, "read", [cacheWithSingleChange], {
+        await main(tmp, cacheWithSingleChange, "read", [], {
           concurrency: 1,
         });
       });
@@ -317,7 +317,7 @@ describe("workspace-cache", () => {
 
     describe("on a cache that is in-sync", () => {
       beforeEach(async () => {
-        await main(tmp, "read", [cacheInSync], {
+        await main(tmp, cacheInSync, "read", [], {
           concurrency: 1,
         });
       });
@@ -345,7 +345,7 @@ describe("workspace-cache", () => {
     describe("on a cache with cascading changes", () => {
       beforeEach(async () => {
         await fs.copy(cacheWithCascadingChange, tmp);
-        await main(cwd, "write", [tmp], {
+        await main(cwd, tmp, "write", [], {
           concurrency: 1,
         });
       });
@@ -372,7 +372,7 @@ describe("workspace-cache", () => {
     describe("on a cache with partial cascading changes", () => {
       beforeEach(async () => {
         await fs.copy(cacheWithPartialCascadingChange, tmp);
-        await main(cwd, "write", [tmp], {
+        await main(cwd, tmp, "write", [], {
           concurrency: 1,
         });
       });
@@ -392,7 +392,7 @@ describe("workspace-cache", () => {
     describe("on a cache with a single change", () => {
       beforeEach(async () => {
         await fs.copy(cacheWithSingleChange, tmp);
-        await main(cwd, "write", [tmp], { concurrency: 1 });
+        await main(cwd, tmp, "write", [], { concurrency: 1 });
       });
 
       it("copies cached files into the repo", () => {
@@ -407,7 +407,7 @@ describe("workspace-cache", () => {
     describe("on a cache that is in-sync", () => {
       beforeEach(async () => {
         await fs.copy(cacheInSync, tmp);
-        await main(cwd, "write", [tmp], { concurrency: 1 });
+        await main(cwd, tmp, "write", [], { concurrency: 1 });
       });
 
       it("copies cached files into the repo", () => {
@@ -444,7 +444,7 @@ describe("workspace-cache", () => {
         "55b1498eb7de5a2a672eeeb89e72c64a4a37702c187f55b2842c20f90aca6030"
       );
 
-      await main(cwd, "clean", [tmp], { concurrency: 1, olderThan: 8 });
+      await main(cwd, tmp, "clean", [], { concurrency: 1, olderThan: 8 });
     });
 
     it("removes old directories", () => {

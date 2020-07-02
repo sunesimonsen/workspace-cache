@@ -3,14 +3,16 @@ const meow = require("meow");
 const { main } = require("..");
 const os = require("os");
 const cpus = os.cpus().length;
+const path = require("path");
 
 const cli = meow(`
   Usage
 
-    $ workspace-cache <command> [flags] <cache-dir>
+    $ workspace-cache <command> [flags]
 
   Flags
     --concurrency       how many threads to use, defaults to 2 * CPU's
+    --cache             the cache directory, defaults to .workspace-cache
 
   Commands
 
@@ -35,16 +37,17 @@ const cli = meow(`
 
   Examples
 
-    workspace-cache list /tmp/workspace-cache
-    workspace-cache list --filter cached /tmp/workspace-cache
-    workspace-cache list --filter not-cached /tmp/workspace-cache
+    workspace-cache list
+    workspace-cache list --filter cached
+    workspace-cache list --filter not-cached
 
-    workspace-cache write /tmp/workspace-cache
 
-    workspace-cache read /tmp/workspace-cache
+    workspace-cache write
 
-    workspace-cache clean /tmp/workspace-cache
-    workspace-cache clean --older-than 3 /tmp/workspace-cache
+    workspace-cache read
+
+    workspace-cache clean
+    workspace-cache clean --older-than 3
 `);
 
 const [command, ...args] = cli.input;
@@ -61,6 +64,7 @@ const defaults = {
   hierarchy: "all",
   olderThan: 30,
   concurrency: 2 * cpus,
+  cache: ".workspace-cache",
 };
 
 const flags = cli.flags;
@@ -68,7 +72,6 @@ const flags = cli.flags;
 const options = { ...defaults, ...flags };
 
 ensure(["list", "write", "read", "clean"].includes(command));
-ensure(args.length === 1);
 ensure(
   typeof options.olderThan === "number" &&
     options.olderThan >= 0 &&
@@ -79,8 +82,9 @@ ensure(["all", "not-cached", "cached"].includes(options.filter));
 ensure(["all", "shared", "root"].includes(options.hierarchy));
 
 const cwd = process.cwd();
+const cacheDir = path.join(cwd, options.cache);
 
-main(cwd, command, args, options).catch(e => {
+main(cwd, cacheDir, command, args, options).catch(e => {
   console.error(e.message);
   console.error(e.stack);
   process.exit(1);
