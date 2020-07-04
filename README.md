@@ -37,8 +37,10 @@ Commands
                       cached: all packages that is cached for the current version
 
     --hierarchy       all: (default) don't filter based on hierarchy
-                      shared: only list shared packages
-                      root: only list root packages
+                      shared: only shared packages
+                      root: only root packages
+
+    --grep            only packages which name matches the given glob pattern
 
   run <script>        run a npm script in each packages that contains that script
 
@@ -47,8 +49,10 @@ Commands
                       cached: all packages that is cached for the current version
 
     --hierarchy       all: (default) don't filter based on hierarchy
-                      shared: only list shared packages
-                      root: only list root packages
+                      shared: only shared packages
+                      root: only root packages
+
+    --grep            only packages which name matches the given glob pattern
 
     --topological     runs scripts in dependency order
 
@@ -59,8 +63,10 @@ Commands
                       cached: all packages that is cached for the current version
 
     --hierarchy       all: (default) don't filter based on hierarchy
-                      shared: only list shared packages
-                      root: only list root packages
+                      shared: only shared packages
+                      root: only root packages
+
+    --grep            only packages which name matches the given glob pattern
 
     --topological     runs scripts in dependency order
 
@@ -79,11 +85,13 @@ Examples
   workspace-cache list --filter cached
   workspace-cache list --filter not-cached
   workspace-cache list --hierarchy root
+  workspace-cache list --hierarchy root --grep "@common/*"
 
   workspace-cache run build --topological
   workspace-cache run build --topological --filter not-cached
   workspace-cache run test --hierarchy root
   workspace-cache run test -- -i
+  workspace-cache run test --grep "*streams"
 
   workspace-cache exec ls
   workspace-cache exec -- ls -l
