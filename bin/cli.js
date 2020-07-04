@@ -38,6 +38,20 @@ const cli = meow(`
                         shared: only list shared packages
                         root: only list root packages
 
+      --topological     runs scripts in dependency order
+
+    exec <command>       run a shell command in each packages
+
+      --filter          all: (default) all packages
+                        not-cached: all packages that is not cached for the current version
+                        cached: all packages that is cached for the current version
+
+      --hierarchy       all: (default) don't filter based on hierarchy
+                        shared: only list shared packages
+                        root: only list root packages
+
+      --topological     runs scripts in dependency order
+
     write               synchronizes to the cache
 
     read                synchronizes from the cache
@@ -52,7 +66,15 @@ const cli = meow(`
     workspace-cache list
     workspace-cache list --filter cached
     workspace-cache list --filter not-cached
+    workspace-cache list --hierarchy root
 
+    workspace-cache run build --topological
+    workspace-cache run build --topological --filter not-cached
+    workspace-cache run test --hierarchy root
+    workspace-cache run test -- -i
+
+    workspace-cache exec ls
+    workspace-cache exec -- ls -l
 
     workspace-cache write
 
@@ -83,13 +105,13 @@ const flags = cli.flags;
 
 const options = { ...defaults, ...flags };
 
-ensure(["list", "write", "read", "run", "clean"].includes(command));
+ensure(["exec", "list", "write", "read", "run", "clean"].includes(command));
 ensure(
   typeof options.olderThan === "number" &&
     options.olderThan >= 0 &&
     options.olderThan <= 120
 );
-ensure(command !== "run" || args.length > 0);
+ensure(command !== "run" || command !== "exec" || args.length > 0);
 ensure(typeof options.concurrency === "number" && options.concurrency >= 1);
 ensure(["all", "not-cached", "cached"].includes(options.filter));
 ensure(["all", "shared", "root"].includes(options.hierarchy));

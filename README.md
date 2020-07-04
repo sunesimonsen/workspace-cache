@@ -50,6 +50,20 @@ Commands
                       shared: only list shared packages
                       root: only list root packages
 
+    --topological     runs scripts in dependency order
+
+  exec <command>       run a shell command in each packages
+
+    --filter          all: (default) all packages
+                      not-cached: all packages that is not cached for the current version
+                      cached: all packages that is cached for the current version
+
+    --hierarchy       all: (default) don't filter based on hierarchy
+                      shared: only list shared packages
+                      root: only list root packages
+
+    --topological     runs scripts in dependency order
+
   write               synchronizes to the cache
 
   read                synchronizes from the cache
@@ -64,10 +78,15 @@ Examples
   workspace-cache list
   workspace-cache list --filter cached
   workspace-cache list --filter not-cached
+  workspace-cache list --hierarchy root
 
-  workspace-cache run test
-  workspace-cache run test --filter cached
-  workspace-cache run test --filter not-cached
+  workspace-cache run build --topological
+  workspace-cache run build --topological --filter not-cached
+  workspace-cache run test --hierarchy root
+  workspace-cache run test -- -i
+
+  workspace-cache exec ls
+  workspace-cache exec -- ls -l
 
   workspace-cache write
 
