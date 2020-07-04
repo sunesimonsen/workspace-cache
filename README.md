@@ -23,12 +23,24 @@ Usage
   $ workspace-cache <command> [flags]
 
 Flags
+
   --concurrency       how many threads to use, defaults to 2 * CPU's
+
   --cache             the cache directory, defaults to .workspace-cache
 
 Commands
 
   list                list the packages in dependency order
+
+    --filter          all: (default) all packages
+                      not-cached: all packages that is not cached for the current version
+                      cached: all packages that is cached for the current version
+
+    --hierarchy       all: (default) don't filter based on hierarchy
+                      shared: only list shared packages
+                      root: only list root packages
+
+  run <script>        run a npm script in each packages that contains that script
 
     --filter          all: (default) all packages
                       not-cached: all packages that is not cached for the current version

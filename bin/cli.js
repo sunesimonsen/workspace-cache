@@ -11,12 +11,24 @@ const cli = meow(`
     $ workspace-cache <command> [flags]
 
   Flags
+
     --concurrency       how many threads to use, defaults to 2 * CPU's
+
     --cache             the cache directory, defaults to .workspace-cache
 
   Commands
 
     list                list the packages in dependency order
+
+      --filter          all: (default) all packages
+                        not-cached: all packages that is not cached for the current version
+                        cached: all packages that is cached for the current version
+
+      --hierarchy       all: (default) don't filter based on hierarchy
+                        shared: only list shared packages
+                        root: only list root packages
+
+    run <script>        run a npm script in each packages that contains that script
 
       --filter          all: (default) all packages
                         not-cached: all packages that is not cached for the current version
@@ -71,12 +83,13 @@ const flags = cli.flags;
 
 const options = { ...defaults, ...flags };
 
-ensure(["list", "write", "read", "clean"].includes(command));
+ensure(["list", "write", "read", "run", "clean"].includes(command));
 ensure(
   typeof options.olderThan === "number" &&
     options.olderThan >= 0 &&
     options.olderThan <= 120
 );
+ensure(command !== "run" || args.length > 0);
 ensure(typeof options.concurrency === "number" && options.concurrency >= 1);
 ensure(["all", "not-cached", "cached"].includes(options.filter));
 ensure(["all", "shared", "root"].includes(options.hierarchy));

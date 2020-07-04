@@ -14,8 +14,9 @@
     "preversion": "npm run lint"
   },
   "dependencies": {
-    "@transformation/core": "^1.27.1",
-    "@transformation/glob": "^1.27.1",
+    "@transformation/core": "^1.29.1",
+    "@transformation/glob": "^1.29.1",
+    "chalk": "^4.1.0",
     "delete-empty": "3.0.0",
     "fs-extra": "8.1.0",
     "md5-file": "4.0.0",
