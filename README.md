@@ -54,9 +54,9 @@ Commands
 
     --grep            only packages which name matches the given glob pattern
 
-    --topological     runs scripts in dependency order
+    --include-deps    runs scripts on all dependencies before the filtered packages
 
-  exec <command>       run a shell command in each packages
+  exec <command>      run a shell command in each packages
 
     --filter          all: (default) all packages
                       not-cached: all packages that is not cached for the current version
@@ -68,7 +68,7 @@ Commands
 
     --grep            only packages which name matches the given glob pattern
 
-    --topological     runs scripts in dependency order
+    --include-deps    runs the shell command on all dependencies before the filtered packages
 
   write               synchronizes to the cache
 
@@ -87,8 +87,8 @@ Examples
   workspace-cache list --hierarchy root
   workspace-cache list --hierarchy root --grep "@common/*"
 
-  workspace-cache run build --topological
-  workspace-cache run build --topological --filter not-cached
+  workspace-cache run build --include-deps
+  workspace-cache run build --include-deps --filter not-cached
   workspace-cache run test --hierarchy root
   workspace-cache run test -- -i
   workspace-cache run test --grep "*streams"

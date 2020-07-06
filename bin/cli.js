@@ -6,90 +6,90 @@ const cpus = os.cpus().length;
 const path = require("path");
 
 const cli = meow(`
-  Usage
+Usage
 
-    $ workspace-cache <command> [flags]
+  $ workspace-cache <command> [flags]
 
-  Flags
+Flags
 
-    --concurrency       how many threads to use, defaults to 2 * CPU's
+  --concurrency       how many threads to use, defaults to 2 * CPU's
 
-    --cache             the cache directory, defaults to .workspace-cache
+  --cache             the cache directory, defaults to .workspace-cache
 
-  Commands
+Commands
 
-    list                list the packages in dependency order
+  list                list the packages in dependency order
 
-      --filter          all: (default) all packages
-                        not-cached: all packages that is not cached for the current version
-                        cached: all packages that is cached for the current version
+    --filter          all: (default) all packages
+                      not-cached: all packages that is not cached for the current version
+                      cached: all packages that is cached for the current version
 
-      --hierarchy       all: (default) don't filter based on hierarchy
-                        shared: only shared packages
-                        root: only root packages
+    --hierarchy       all: (default) don't filter based on hierarchy
+                      shared: only shared packages
+                      root: only root packages
 
-      --grep            only packages which name matches the given glob pattern
+    --grep            only packages which name matches the given glob pattern
 
-    run <script>        run a npm script in each packages that contains that script
+  run <script>        run a npm script in each packages that contains that script
 
-      --filter          all: (default) all packages
-                        not-cached: all packages that is not cached for the current version
-                        cached: all packages that is cached for the current version
+    --filter          all: (default) all packages
+                      not-cached: all packages that is not cached for the current version
+                      cached: all packages that is cached for the current version
 
-      --hierarchy       all: (default) don't filter based on hierarchy
-                        shared: only shared packages
-                        root: only root packages
+    --hierarchy       all: (default) don't filter based on hierarchy
+                      shared: only shared packages
+                      root: only root packages
 
-      --grep            only packages which name matches the given glob pattern
+    --grep            only packages which name matches the given glob pattern
 
-      --topological     runs scripts in dependency order
+    --include-deps    runs scripts on all dependencies before the filtered packages
 
-    exec <command>       run a shell command in each packages
+  exec <command>      run a shell command in each packages
 
-      --filter          all: (default) all packages
-                        not-cached: all packages that is not cached for the current version
-                        cached: all packages that is cached for the current version
+    --filter          all: (default) all packages
+                      not-cached: all packages that is not cached for the current version
+                      cached: all packages that is cached for the current version
 
-      --hierarchy       all: (default) don't filter based on hierarchy
-                        shared: only shared packages
-                        root: only root packages
+    --hierarchy       all: (default) don't filter based on hierarchy
+                      shared: only shared packages
+                      root: only root packages
 
-      --grep            only packages which name matches the given glob pattern
+    --grep            only packages which name matches the given glob pattern
 
-      --topological     runs scripts in dependency order
+    --include-deps    runs the shell command on all dependencies before the filtered packages
 
-    write               synchronizes to the cache
+  write               synchronizes to the cache
 
-    read                synchronizes from the cache
+  read                synchronizes from the cache
 
-    clean               clean the cache
+  clean               clean the cache
 
-      --older-than n    will clean files older than n days,
-                        n must be between 0 and 120 and defaults to 30
+    --older-than n    will clean files older than n days,
+                      n must be between 0 and 120 and defaults to 30
 
-  Examples
+Examples
 
-    workspace-cache list
-    workspace-cache list --filter cached
-    workspace-cache list --filter not-cached
-    workspace-cache list --hierarchy root
-    workspace-cache list --hierarchy root --grep "@common/*"
+  workspace-cache list
+  workspace-cache list --filter cached
+  workspace-cache list --filter not-cached
+  workspace-cache list --hierarchy root
+  workspace-cache list --hierarchy root --grep "@common/*"
 
-    workspace-cache run build --topological
-    workspace-cache run build --topological --filter not-cached
-    workspace-cache run test --hierarchy root
-    workspace-cache run test -- -i
-    workspace-cache run test --grep "*streams"
+  workspace-cache run build --include-deps
+  workspace-cache run build --include-deps --filter not-cached
+  workspace-cache run test --hierarchy root
+  workspace-cache run test -- -i
+  workspace-cache run test --grep "*streams"
 
-    workspace-cache exec ls
-    workspace-cache exec -- ls -l
+  workspace-cache exec ls
+  workspace-cache exec -- ls -l
 
-    workspace-cache write
+  workspace-cache write
 
-    workspace-cache read
+  workspace-cache read
 
-    workspace-cache clean
-    workspace-cache clean --older-than 3
+  workspace-cache clean
+  workspace-cache clean --older-than 3
 `);
 
 const [command, ...args] = cli.input;
