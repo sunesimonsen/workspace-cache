@@ -284,10 +284,10 @@ describe("workspace-cache", () => {
             "../caches/with-partial-cascading-change/development/package-c/bad7f7b5128e8c6510839dca9cbc52fd058b3409da3e340d2d4aa1dac7ed9b9c/dist/index.js => packages/package-c/dist/index.js"
           );
           console.log(
-            "../caches/with-partial-cascading-change/development/package-b/7b00fb1e6e1fede9e31cf43713b516cfeef733806875a8cd671df718a2e8a65f/dist => packages/package-b/dist"
+            "../caches/with-partial-cascading-change/development/package-b/08665de98016ba06018a836d2a8cfaa7011e0847467f3f729a986c304931512e/dist => packages/package-b/dist"
           );
           console.log(
-            "../caches/with-partial-cascading-change/development/app-b/9b07a7ccce91e4bb68d2f4d624a2ada53a25bcabb02ee8a5ea5becd4853b462f/dist/index.js => apps/app-b/dist/index.js"
+            "../caches/with-partial-cascading-change/development/app-b/dde4d299418bc5691bb4a5842f3b49f2f6ff681a86e64222def55fea7f041018/dist/index.js => apps/app-b/dist/index.js"
           );
         });
       });
@@ -306,10 +306,10 @@ describe("workspace-cache", () => {
             "../caches/with-single-change/development/package-c/bad7f7b5128e8c6510839dca9cbc52fd058b3409da3e340d2d4aa1dac7ed9b9c/dist/index.js => packages/package-c/dist/index.js"
           );
           console.log(
-            "../caches/with-single-change/development/package-b/7b00fb1e6e1fede9e31cf43713b516cfeef733806875a8cd671df718a2e8a65f/dist => packages/package-b/dist"
+            "../caches/with-single-change/development/package-b/08665de98016ba06018a836d2a8cfaa7011e0847467f3f729a986c304931512e/dist => packages/package-b/dist"
           );
           console.log(
-            "../caches/with-single-change/development/app-a/b4c4a5cce290812ef6d1d721fecfef7f6c8d8bbba21b161f28b6057e50fc1d76/dist => apps/app-a/dist"
+            "../caches/with-single-change/development/app-a/32c5e1960f69c657490dd418d3fa42630f7e5c854794b792c490acac34c8face/dist => apps/app-a/dist"
           );
         });
       });
@@ -328,13 +328,13 @@ describe("workspace-cache", () => {
             "../caches/in-sync/development/package-c/bad7f7b5128e8c6510839dca9cbc52fd058b3409da3e340d2d4aa1dac7ed9b9c/dist/index.js => packages/package-c/dist/index.js"
           );
           console.log(
-            "../caches/in-sync/development/package-b/7b00fb1e6e1fede9e31cf43713b516cfeef733806875a8cd671df718a2e8a65f/dist => packages/package-b/dist"
+            "../caches/in-sync/development/package-b/08665de98016ba06018a836d2a8cfaa7011e0847467f3f729a986c304931512e/dist => packages/package-b/dist"
           );
           console.log(
-            "../caches/in-sync/development/app-b/9b07a7ccce91e4bb68d2f4d624a2ada53a25bcabb02ee8a5ea5becd4853b462f/dist/index.js => apps/app-b/dist/index.js"
+            "../caches/in-sync/development/app-b/dde4d299418bc5691bb4a5842f3b49f2f6ff681a86e64222def55fea7f041018/dist/index.js => apps/app-b/dist/index.js"
           );
           console.log(
-            "../caches/in-sync/development/app-a/b4c4a5cce290812ef6d1d721fecfef7f6c8d8bbba21b161f28b6057e50fc1d76/dist => apps/app-a/dist"
+            "../caches/in-sync/development/app-a/32c5e1960f69c657490dd418d3fa42630f7e5c854794b792c490acac34c8face/dist => apps/app-a/dist"
           );
         });
       });
@@ -380,10 +380,10 @@ describe("workspace-cache", () => {
       it("copies cached files into the repo", () => {
         expect(console.log, "to have calls satisfying", () => {
           console.log(
-            '"Tue, 30 Jun 2020 21:10:00 GMT" => ../tmp/development/package-a/55b1498eb7de5a2a672eeeb89e72c64a4a37702c187f55b2842c20f90aca6030/timestamp.txt'
+            '"Tue, 30 Jun 2020 21:10:00 GMT" => ../tmp/development/package-a/32b514bcdd533c22d7be974aca5fe7a601d8a2a7b6682e2508649a779ef071ea/timestamp.txt'
           );
           console.log(
-            "apps/app-a/dist => ../tmp/development/app-a/b4c4a5cce290812ef6d1d721fecfef7f6c8d8bbba21b161f28b6057e50fc1d76/dist"
+            "apps/app-a/dist => ../tmp/development/app-a/32c5e1960f69c657490dd418d3fa42630f7e5c854794b792c490acac34c8face/dist"
           );
         });
       });
@@ -398,7 +398,7 @@ describe("workspace-cache", () => {
       it("copies cached files into the repo", () => {
         expect(console.log, "to have calls satisfying", () => {
           console.log(
-            "apps/app-b/dist/index.js => ../tmp/development/app-b/9b07a7ccce91e4bb68d2f4d624a2ada53a25bcabb02ee8a5ea5becd4853b462f/dist/index.js"
+            "apps/app-b/dist/index.js => ../tmp/development/app-b/dde4d299418bc5691bb4a5842f3b49f2f6ff681a86e64222def55fea7f041018/dist/index.js"
           );
         });
       });
@@ -429,19 +429,19 @@ describe("workspace-cache", () => {
       await updateTimeStamps(
         beforeLimit,
         "app-a",
-        "218a7cd06af28032e0bf7ad62da76b084b0cfaa26790535b6c9bccba2a89c236"
+        "32c5e1960f69c657490dd418d3fa42630f7e5c854794b792c490acac34c8face"
       );
 
       await updateTimeStamps(
         beforeLimit,
         "package-b",
-        "32e35f4dd16831418f00b3088ce5ee27c3462e271eb82616fdf5072b11e4b87f"
+        "08665de98016ba06018a836d2a8cfaa7011e0847467f3f729a986c304931512e"
       );
 
       await updateTimeStamps(
         afterLimit,
         "package-a",
-        "55b1498eb7de5a2a672eeeb89e72c64a4a37702c187f55b2842c20f90aca6030"
+        "32b514bcdd533c22d7be974aca5fe7a601d8a2a7b6682e2508649a779ef071ea"
       );
 
       await main(cwd, tmp, "clean", [], { concurrency: 1, olderThan: 8 });
@@ -450,10 +450,10 @@ describe("workspace-cache", () => {
     it("removes old directories", () => {
       expect(console.log, "to have calls satisfying", () => {
         console.log(
-          "Removed ../tmp/development/app-a/218a7cd06af28032e0bf7ad62da76b084b0cfaa26790535b6c9bccba2a89c236"
+          "Removed ../tmp/development/app-a/32c5e1960f69c657490dd418d3fa42630f7e5c854794b792c490acac34c8face"
         );
         console.log(
-          "Removed ../tmp/development/package-b/32e35f4dd16831418f00b3088ce5ee27c3462e271eb82616fdf5072b11e4b87f"
+          "Removed ../tmp/development/package-b/08665de98016ba06018a836d2a8cfaa7011e0847467f3f729a986c304931512e"
         );
       });
     });
