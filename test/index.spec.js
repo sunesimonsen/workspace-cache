@@ -1,6 +1,7 @@
 const path = require("path");
 const sinon = require("sinon");
 const fs = require("fs-extra");
+const mockIO = require("mock-stdio");
 const expect = require("unexpected")
   .clone()
   .use(require("unexpected-sinon"));
@@ -250,6 +251,185 @@ describe("workspace-cache", () => {
           console.log("package-c");
           console.log("package-b");
         });
+      });
+    });
+  });
+
+  describe("run", () => {
+    let result;
+
+    const getOutputs = () => {
+      const regex = /(package|app)-[abc]: yarn run hello/g;
+      let m;
+      const results = [];
+
+      do {
+        m = regex.exec(result.stdout);
+        if (m) {
+          results.push(m[0]);
+        }
+      } while (m);
+
+      return results;
+    };
+
+    describe("without filtering", () => {
+      beforeEach(async () => {
+        mockIO.start();
+        try {
+          await main(cwd, cacheWithPartialCascadingChange, "run", ["hello"], {
+            concurrency: 1,
+            filter: "all",
+            hierarchy: "all",
+          });
+        } finally {
+          result = mockIO.end();
+        }
+      });
+
+      it("runs the script in all packages with that script", () => {
+        expect(getOutputs(), "to equal", [
+          "package-c: yarn run hello",
+          "package-b: yarn run hello",
+          "app-b: yarn run hello",
+          "app-a: yarn run hello",
+        ]);
+      });
+    });
+
+    describe("with filtering", () => {
+      beforeEach(async () => {
+        mockIO.start();
+        try {
+          await main(cwd, cacheWithPartialCascadingChange, "run", ["hello"], {
+            concurrency: 1,
+            filter: "all",
+            hierarchy: "all",
+            grep: "app-?",
+          });
+        } finally {
+          result = mockIO.end();
+        }
+      });
+
+      it("honors the filtering", () => {
+        expect(getOutputs(), "to equal", [
+          "app-b: yarn run hello",
+          "app-a: yarn run hello",
+        ]);
+      });
+    });
+
+    describe("with --include-deps", () => {
+      beforeEach(async () => {
+        mockIO.start();
+        try {
+          await main(cwd, cacheWithPartialCascadingChange, "run", ["hello"], {
+            concurrency: 1,
+            filter: "all",
+            hierarchy: "all",
+            grep: "app-a",
+            includeDeps: true,
+          });
+        } finally {
+          result = mockIO.end();
+        }
+      });
+
+      it("includes all of the dependencies with the given script of the filtered packages", () => {
+        expect(getOutputs(), "to equal", [
+          "package-c: yarn run hello",
+          "app-a: yarn run hello",
+        ]);
+      });
+    });
+  });
+
+  describe("exec", () => {
+    let result;
+
+    const getOutputs = () => {
+      const regex = /(package|app)-[abc]: ls/g;
+      let m;
+      const results = [];
+
+      do {
+        m = regex.exec(result.stdout);
+        if (m) {
+          results.push(m[0]);
+        }
+      } while (m);
+
+      return results;
+    };
+
+    describe("without filtering", () => {
+      beforeEach(async () => {
+        mockIO.start();
+        try {
+          await main(cwd, cacheWithPartialCascadingChange, "exec", ["ls"], {
+            concurrency: 1,
+            filter: "all",
+            hierarchy: "all",
+          });
+        } finally {
+          result = mockIO.end();
+        }
+      });
+
+      it("runs the script in all packages with that script", () => {
+        expect(getOutputs(), "to equal", [
+          "package-c: ls",
+          "package-b: ls",
+          "package-a: ls",
+          "app-b: ls",
+          "app-a: ls",
+        ]);
+      });
+    });
+
+    describe("with filtering", () => {
+      beforeEach(async () => {
+        mockIO.start();
+        try {
+          await main(cwd, cacheWithPartialCascadingChange, "exec", ["ls"], {
+            concurrency: 1,
+            filter: "all",
+            hierarchy: "all",
+            grep: "app-?",
+          });
+        } finally {
+          result = mockIO.end();
+        }
+      });
+
+      it("honors the filtering", () => {
+        expect(getOutputs(), "to equal", ["app-b: ls", "app-a: ls"]);
+      });
+    });
+
+    describe("with --include-deps", () => {
+      beforeEach(async () => {
+        mockIO.start();
+        try {
+          await main(cwd, cacheWithPartialCascadingChange, "exec", ["ls"], {
+            concurrency: 1,
+            filter: "all",
+            hierarchy: "all",
+            grep: "app-a",
+            includeDeps: true,
+          });
+        } finally {
+          result = mockIO.end();
+        }
+      });
+
+      it("includes all of the dependencies with the given script of the filtered packages", () => {
+        expect(getOutputs(), "to equal", [
+          "package-c: ls",
+          "package-a: ls",
+          "app-a: ls",
+        ]);
       });
     });
   });
