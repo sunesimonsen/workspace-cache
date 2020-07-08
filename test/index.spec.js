@@ -281,13 +281,13 @@ describe("workspace-cache", () => {
       it("copies cached files into the repo", () => {
         expect(console.log, "to have calls satisfying", () => {
           console.log(
-            "../caches/with-partial-cascading-change/development/package-c/bad7f7b5128e8c6510839dca9cbc52fd058b3409da3e340d2d4aa1dac7ed9b9c/dist/index.js => packages/package-c/dist/index.js"
+            "../caches/with-partial-cascading-change/development/package-c/d13a3b760af8df0c0eb6115c9d91e69e9aedc60f6ba34f17affef0c56df03f11/dist/index.js => packages/package-c/dist/index.js"
           );
           console.log(
-            "../caches/with-partial-cascading-change/development/package-b/08665de98016ba06018a836d2a8cfaa7011e0847467f3f729a986c304931512e/dist => packages/package-b/dist"
+            "../caches/with-partial-cascading-change/development/package-b/2c29829c5b81e8e9f786c77315cd073f7e8c51cb6bed7756123d4681982e2937/dist => packages/package-b/dist"
           );
           console.log(
-            "../caches/with-partial-cascading-change/development/app-b/dde4d299418bc5691bb4a5842f3b49f2f6ff681a86e64222def55fea7f041018/dist/index.js => apps/app-b/dist/index.js"
+            "../caches/with-partial-cascading-change/development/app-b/4505dc9761270c4133da56c04572d22650001cb722a99ed0862ad56c2e9465ee/dist/index.js => apps/app-b/dist/index.js"
           );
         });
       });
@@ -303,13 +303,13 @@ describe("workspace-cache", () => {
       it("copies cached files into the repo", () => {
         expect(console.log, "to have calls satisfying", () => {
           console.log(
-            "../caches/with-single-change/development/package-c/bad7f7b5128e8c6510839dca9cbc52fd058b3409da3e340d2d4aa1dac7ed9b9c/dist/index.js => packages/package-c/dist/index.js"
+            "../caches/with-single-change/development/package-c/d13a3b760af8df0c0eb6115c9d91e69e9aedc60f6ba34f17affef0c56df03f11/dist/index.js => packages/package-c/dist/index.js"
           );
           console.log(
-            "../caches/with-single-change/development/package-b/08665de98016ba06018a836d2a8cfaa7011e0847467f3f729a986c304931512e/dist => packages/package-b/dist"
+            "../caches/with-single-change/development/package-b/2c29829c5b81e8e9f786c77315cd073f7e8c51cb6bed7756123d4681982e2937/dist => packages/package-b/dist"
           );
           console.log(
-            "../caches/with-single-change/development/app-a/32c5e1960f69c657490dd418d3fa42630f7e5c854794b792c490acac34c8face/dist => apps/app-a/dist"
+            "../caches/with-single-change/development/app-a/e1a5eadec3480af8072f7e13dfad12f0c246eb8e5ea48229058840dacf285d81/dist => apps/app-a/dist"
           );
         });
       });
@@ -325,16 +325,16 @@ describe("workspace-cache", () => {
       it("copies cached files into the repo", () => {
         expect(console.log, "to have calls satisfying", () => {
           console.log(
-            "../caches/in-sync/development/package-c/bad7f7b5128e8c6510839dca9cbc52fd058b3409da3e340d2d4aa1dac7ed9b9c/dist/index.js => packages/package-c/dist/index.js"
+            "../caches/in-sync/development/package-c/d13a3b760af8df0c0eb6115c9d91e69e9aedc60f6ba34f17affef0c56df03f11/dist/index.js => packages/package-c/dist/index.js"
           );
           console.log(
-            "../caches/in-sync/development/package-b/08665de98016ba06018a836d2a8cfaa7011e0847467f3f729a986c304931512e/dist => packages/package-b/dist"
+            "../caches/in-sync/development/package-b/2c29829c5b81e8e9f786c77315cd073f7e8c51cb6bed7756123d4681982e2937/dist => packages/package-b/dist"
           );
           console.log(
-            "../caches/in-sync/development/app-b/dde4d299418bc5691bb4a5842f3b49f2f6ff681a86e64222def55fea7f041018/dist/index.js => apps/app-b/dist/index.js"
+            "../caches/in-sync/development/app-b/4505dc9761270c4133da56c04572d22650001cb722a99ed0862ad56c2e9465ee/dist/index.js => apps/app-b/dist/index.js"
           );
           console.log(
-            "../caches/in-sync/development/app-a/32c5e1960f69c657490dd418d3fa42630f7e5c854794b792c490acac34c8face/dist => apps/app-a/dist"
+            "../caches/in-sync/development/app-a/e1a5eadec3480af8072f7e13dfad12f0c246eb8e5ea48229058840dacf285d81/dist => apps/app-a/dist"
           );
         });
       });
@@ -352,7 +352,7 @@ describe("workspace-cache", () => {
 
       it("copies cached files into the repo", () => {
         console.log(
-          "packages/package-c/dist/index.js => ../tmp/development/package-c/bad7f7b5128e8c6510839dca9cbc52fd058b3409da3e340d2d4aa1dac7ed9b9c/dist/index.js"
+          "packages/package-c/dist/index.js => ../tmp/development/package-c//dist/index.js"
         );
         console.log(
           "packages/package-b/dist => ../tmp/development/package-b/7b00fb1e6e1fede9e31cf43713b516cfeef733806875a8cd671df718a2e8a65f/dist"
@@ -380,10 +380,10 @@ describe("workspace-cache", () => {
       it("copies cached files into the repo", () => {
         expect(console.log, "to have calls satisfying", () => {
           console.log(
-            '"Tue, 30 Jun 2020 21:10:00 GMT" => ../tmp/development/package-a/32b514bcdd533c22d7be974aca5fe7a601d8a2a7b6682e2508649a779ef071ea/timestamp.txt'
+            '"Tue, 30 Jun 2020 21:10:00 GMT" => ../tmp/development/package-a/4aeb1c73aa5bb1634e008e56e63f9d8be001be6b02cb86306bef10284e67cfb5/timestamp.txt'
           );
           console.log(
-            "apps/app-a/dist => ../tmp/development/app-a/32c5e1960f69c657490dd418d3fa42630f7e5c854794b792c490acac34c8face/dist"
+            "apps/app-a/dist => ../tmp/development/app-a/e1a5eadec3480af8072f7e13dfad12f0c246eb8e5ea48229058840dacf285d81/dist"
           );
         });
       });
@@ -398,7 +398,7 @@ describe("workspace-cache", () => {
       it("copies cached files into the repo", () => {
         expect(console.log, "to have calls satisfying", () => {
           console.log(
-            "apps/app-b/dist/index.js => ../tmp/development/app-b/dde4d299418bc5691bb4a5842f3b49f2f6ff681a86e64222def55fea7f041018/dist/index.js"
+            "apps/app-b/dist/index.js => ../tmp/development/app-b/4505dc9761270c4133da56c04572d22650001cb722a99ed0862ad56c2e9465ee/dist/index.js"
           );
         });
       });
@@ -429,19 +429,19 @@ describe("workspace-cache", () => {
       await updateTimeStamps(
         beforeLimit,
         "app-a",
-        "32c5e1960f69c657490dd418d3fa42630f7e5c854794b792c490acac34c8face"
+        "e1a5eadec3480af8072f7e13dfad12f0c246eb8e5ea48229058840dacf285d81"
       );
 
       await updateTimeStamps(
         beforeLimit,
         "package-b",
-        "08665de98016ba06018a836d2a8cfaa7011e0847467f3f729a986c304931512e"
+        "2c29829c5b81e8e9f786c77315cd073f7e8c51cb6bed7756123d4681982e2937"
       );
 
       await updateTimeStamps(
         afterLimit,
         "package-a",
-        "32b514bcdd533c22d7be974aca5fe7a601d8a2a7b6682e2508649a779ef071ea"
+        "4aeb1c73aa5bb1634e008e56e63f9d8be001be6b02cb86306bef10284e67cfb5"
       );
 
       await main(cwd, tmp, "clean", [], { concurrency: 1, olderThan: 8 });
@@ -450,10 +450,10 @@ describe("workspace-cache", () => {
     it("removes old directories", () => {
       expect(console.log, "to have calls satisfying", () => {
         console.log(
-          "Removed ../tmp/development/app-a/32c5e1960f69c657490dd418d3fa42630f7e5c854794b792c490acac34c8face"
+          "Removed ../tmp/development/app-a/e1a5eadec3480af8072f7e13dfad12f0c246eb8e5ea48229058840dacf285d81"
         );
         console.log(
-          "Removed ../tmp/development/package-b/08665de98016ba06018a836d2a8cfaa7011e0847467f3f729a986c304931512e"
+          "Removed ../tmp/development/package-b/2c29829c5b81e8e9f786c77315cd073f7e8c51cb6bed7756123d4681982e2937"
         );
       });
     });
