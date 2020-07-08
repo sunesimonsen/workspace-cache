@@ -14,13 +14,16 @@
     "preversion": "npm run lint"
   },
   "dependencies": {
-    "@transformation/core": "^1.27.1",
-    "@transformation/glob": "^1.27.1",
+    "@transformation/core": "^1.30.1",
+    "@transformation/glob": "^1.30.1",
+    "chalk": "^4.1.0",
     "delete-empty": "3.0.0",
     "fs-extra": "8.1.0",
     "md5-file": "4.0.0",
     "mem": "6.0.1",
-    "meow": "5.0.0"
+    "meow": "^7.0.1",
+    "picomatch": "^2.2.2",
+    "supports-color": "^7.1.0"
   },
   "devDependencies": {
     "eslint": "^6.0.0",
@@ -32,6 +35,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
     "mocha": "^8.0.1",
+    "mock-stdio": "^1.0.3",
     "prettier": "~1.19.1",
     "sinon": "^9.0.2",
     "unexpected": "^11.14.0",

@@ -20,10 +20,13 @@ npm install workspace-cache
 ```
 Usage
 
-  $ workspace-cache <command> [flags] <cache-dir>
+  $ workspace-cache <command> [flags]
 
 Flags
+
   --concurrency       how many threads to use, defaults to 2 * CPU's
+
+  --cache             the cache directory, defaults to .workspace-cache
 
 Commands
 
@@ -34,8 +37,38 @@ Commands
                       cached: all packages that is cached for the current version
 
     --hierarchy       all: (default) don't filter based on hierarchy
-                      shared: only list shared packages
-                      root: only list root packages
+                      shared: only shared packages
+                      root: only root packages
+
+    --grep            only packages which name matches the given glob pattern
+
+  run <script>        run a npm script in each packages that contains that script
+
+    --filter          all: (default) all packages
+                      not-cached: all packages that is not cached for the current version
+                      cached: all packages that is cached for the current version
+
+    --hierarchy       all: (default) don't filter based on hierarchy
+                      shared: only shared packages
+                      root: only root packages
+
+    --grep            only packages which name matches the given glob pattern
+
+    --include-deps    runs scripts on all dependencies before the filtered packages
+
+  exec <command>      run a shell command in each packages
+
+    --filter          all: (default) all packages
+                      not-cached: all packages that is not cached for the current version
+                      cached: all packages that is cached for the current version
+
+    --hierarchy       all: (default) don't filter based on hierarchy
+                      shared: only shared packages
+                      root: only root packages
+
+    --grep            only packages which name matches the given glob pattern
+
+    --include-deps    runs the shell command on all dependencies before the filtered packages
 
   write               synchronizes to the cache
 
@@ -48,16 +81,27 @@ Commands
 
 Examples
 
-  workspace-cache list /tmp/workspace-cache
-  workspace-cache list --filter cached /tmp/workspace-cache
-  workspace-cache list --filter not-cached /tmp/workspace-cache
+  workspace-cache list
+  workspace-cache list --filter cached
+  workspace-cache list --filter not-cached
+  workspace-cache list --hierarchy root
+  workspace-cache list --hierarchy root --grep "@common/*"
 
-  workspace-cache write /tmp/workspace-cache
+  workspace-cache run build --include-deps
+  workspace-cache run build --include-deps --filter not-cached
+  workspace-cache run test --hierarchy root
+  workspace-cache run test -- -i
+  workspace-cache run test --grep "*streams"
 
-  workspace-cache read /tmp/workspace-cache
+  workspace-cache exec ls
+  workspace-cache exec -- ls -l
 
-  workspace-cache clean /tmp/workspace-cache
-  workspace-cache clean --older-than 3 /tmp/workspace-cache
+  workspace-cache write
+
+  workspace-cache read
+
+  workspace-cache clean
+  workspace-cache clean --older-than 3
 ```
 
 ## MIT License

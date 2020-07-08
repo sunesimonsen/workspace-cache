@@ -10,7 +10,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "rm -rf dist; mkdir -p dist; buble index.js > dist/index.js"
+    "build": "sleep 5; rm -rf dist; mkdir -p dist; buble index.js > dist/index.js",
+    "hello": "echo hello"
   },
   "dependencies": {
     "package-a": "1.0.0"

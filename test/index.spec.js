@@ -1,6 +1,7 @@
 const path = require("path");
 const sinon = require("sinon");
 const fs = require("fs-extra");
+const mockIO = require("mock-stdio");
 const expect = require("unexpected")
   .clone()
   .use(require("unexpected-sinon"));
@@ -41,7 +42,7 @@ describe("workspace-cache", () => {
   describe("list", () => {
     describe("--filter all", () => {
       beforeEach(async () => {
-        await main(cwd, "list", [cacheWithCascadingChange], {
+        await main(cwd, cacheWithCascadingChange, "list", [], {
           concurrency: 1,
           filter: "all",
           hierarchy: "all",
@@ -62,7 +63,7 @@ describe("workspace-cache", () => {
     describe("--filter cached", () => {
       describe("on a cache with cascading changes", () => {
         beforeEach(async () => {
-          await main(cwd, "list", [cacheWithCascadingChange], {
+          await main(cwd, cacheWithCascadingChange, "list", [], {
             concurrency: 1,
             filter: "cached",
             hierarchy: "all",
@@ -76,7 +77,7 @@ describe("workspace-cache", () => {
 
       describe("on a cache with partial cascading changes", () => {
         beforeEach(async () => {
-          await main(cwd, "list", [cacheWithPartialCascadingChange], {
+          await main(cwd, cacheWithPartialCascadingChange, "list", [], {
             concurrency: 1,
             filter: "cached",
             hierarchy: "all",
@@ -94,7 +95,7 @@ describe("workspace-cache", () => {
 
       describe("on a cache with a single change", () => {
         beforeEach(async () => {
-          await main(cwd, "list", [cacheWithSingleChange], {
+          await main(cwd, cacheWithSingleChange, "list", [], {
             concurrency: 1,
             filter: "cached",
             hierarchy: "all",
@@ -113,7 +114,7 @@ describe("workspace-cache", () => {
 
       describe("on a cache that is in-sync", () => {
         beforeEach(async () => {
-          await main(cwd, "list", [cacheInSync], {
+          await main(cwd, cacheInSync, "list", [], {
             concurrency: 1,
             filter: "cached",
             hierarchy: "all",
@@ -135,7 +136,7 @@ describe("workspace-cache", () => {
     describe("--filter not-cached", () => {
       describe("on a cache with cascading changes", () => {
         beforeEach(async () => {
-          await main(cwd, "list", [cacheWithCascadingChange], {
+          await main(cwd, cacheWithCascadingChange, "list", [], {
             concurrency: 1,
             filter: "not-cached",
             hierarchy: "all",
@@ -155,7 +156,7 @@ describe("workspace-cache", () => {
 
       describe("on a cache with partial cascading changes", () => {
         beforeEach(async () => {
-          await main(cwd, "list", [cacheWithPartialCascadingChange], {
+          await main(cwd, cacheWithPartialCascadingChange, "list", [], {
             concurrency: 1,
             filter: "not-cached",
             hierarchy: "all",
@@ -172,7 +173,7 @@ describe("workspace-cache", () => {
 
       describe("on a cache with a single change", () => {
         beforeEach(async () => {
-          await main(cwd, "list", [cacheWithSingleChange], {
+          await main(cwd, cacheWithSingleChange, "list", [], {
             concurrency: 1,
             filter: "not-cached",
             hierarchy: "all",
@@ -188,7 +189,7 @@ describe("workspace-cache", () => {
 
       describe("on a cache that is in-sync", () => {
         beforeEach(async () => {
-          await main(cwd, "list", [cacheInSync], {
+          await main(cwd, cacheInSync, "list", [], {
             concurrency: 1,
             filter: "not-cached",
             hierarchy: "all",
@@ -203,7 +204,7 @@ describe("workspace-cache", () => {
 
     describe("--hierarchy shared", () => {
       beforeEach(async () => {
-        await main(cwd, "list", [cacheInSync], {
+        await main(cwd, cacheInSync, "list", [], {
           concurrency: 1,
           filter: "all",
           hierarchy: "shared",
@@ -221,7 +222,7 @@ describe("workspace-cache", () => {
 
     describe("--hierarchy root", () => {
       beforeEach(async () => {
-        await main(cwd, "list", [cacheInSync], {
+        await main(cwd, cacheInSync, "list", [], {
           concurrency: 1,
           filter: "all",
           hierarchy: "root",
@@ -236,9 +237,27 @@ describe("workspace-cache", () => {
       });
     });
 
+    describe("--grep app-?", () => {
+      beforeEach(async () => {
+        await main(cwd, cacheInSync, "list", [], {
+          concurrency: 1,
+          filter: "all",
+          hierarchy: "all",
+          grep: "app-?",
+        });
+      });
+
+      it("prints the packages that matches the given glob pattern", () => {
+        expect(console.log, "to have calls satisfying", () => {
+          console.log("app-b");
+          console.log("app-a");
+        });
+      });
+    });
+
     describe("--filter cached --hierarchy shared", () => {
       beforeEach(async () => {
-        await main(cwd, "list", [cacheWithPartialCascadingChange], {
+        await main(cwd, cacheWithPartialCascadingChange, "list", [], {
           concurrency: 1,
           filter: "cached",
           hierarchy: "shared",
@@ -254,6 +273,185 @@ describe("workspace-cache", () => {
     });
   });
 
+  describe("run", () => {
+    let result;
+
+    const getOutputs = () => {
+      const regex = /(package|app)-[abc]: yarn run hello/g;
+      let m;
+      const results = [];
+
+      do {
+        m = regex.exec(result.stdout);
+        if (m) {
+          results.push(m[0]);
+        }
+      } while (m);
+
+      return results;
+    };
+
+    describe("without filtering", () => {
+      beforeEach(async () => {
+        mockIO.start();
+        try {
+          await main(cwd, cacheWithPartialCascadingChange, "run", ["hello"], {
+            concurrency: 1,
+            filter: "all",
+            hierarchy: "all",
+          });
+        } finally {
+          result = mockIO.end();
+        }
+      });
+
+      it("runs the script in all packages with that script", () => {
+        expect(getOutputs(), "to equal", [
+          "package-c: yarn run hello",
+          "package-b: yarn run hello",
+          "app-b: yarn run hello",
+          "app-a: yarn run hello",
+        ]);
+      });
+    });
+
+    describe("with filtering", () => {
+      beforeEach(async () => {
+        mockIO.start();
+        try {
+          await main(cwd, cacheWithPartialCascadingChange, "run", ["hello"], {
+            concurrency: 1,
+            filter: "all",
+            hierarchy: "all",
+            grep: "app-?",
+          });
+        } finally {
+          result = mockIO.end();
+        }
+      });
+
+      it("honors the filtering", () => {
+        expect(getOutputs(), "to equal", [
+          "app-b: yarn run hello",
+          "app-a: yarn run hello",
+        ]);
+      });
+    });
+
+    describe("with --include-deps", () => {
+      beforeEach(async () => {
+        mockIO.start();
+        try {
+          await main(cwd, cacheWithPartialCascadingChange, "run", ["hello"], {
+            concurrency: 1,
+            filter: "all",
+            hierarchy: "all",
+            grep: "app-a",
+            includeDeps: true,
+          });
+        } finally {
+          result = mockIO.end();
+        }
+      });
+
+      it("includes all of the dependencies with the given script of the filtered packages", () => {
+        expect(getOutputs(), "to equal", [
+          "package-c: yarn run hello",
+          "app-a: yarn run hello",
+        ]);
+      });
+    });
+  });
+
+  describe("exec", () => {
+    let result;
+
+    const getOutputs = () => {
+      const regex = /(package|app)-[abc]: ls/g;
+      let m;
+      const results = [];
+
+      do {
+        m = regex.exec(result.stdout);
+        if (m) {
+          results.push(m[0]);
+        }
+      } while (m);
+
+      return results;
+    };
+
+    describe("without filtering", () => {
+      beforeEach(async () => {
+        mockIO.start();
+        try {
+          await main(cwd, cacheWithPartialCascadingChange, "exec", ["ls"], {
+            concurrency: 1,
+            filter: "all",
+            hierarchy: "all",
+          });
+        } finally {
+          result = mockIO.end();
+        }
+      });
+
+      it("runs the script in all packages with that script", () => {
+        expect(getOutputs(), "to equal", [
+          "package-c: ls",
+          "package-b: ls",
+          "package-a: ls",
+          "app-b: ls",
+          "app-a: ls",
+        ]);
+      });
+    });
+
+    describe("with filtering", () => {
+      beforeEach(async () => {
+        mockIO.start();
+        try {
+          await main(cwd, cacheWithPartialCascadingChange, "exec", ["ls"], {
+            concurrency: 1,
+            filter: "all",
+            hierarchy: "all",
+            grep: "app-?",
+          });
+        } finally {
+          result = mockIO.end();
+        }
+      });
+
+      it("honors the filtering", () => {
+        expect(getOutputs(), "to equal", ["app-b: ls", "app-a: ls"]);
+      });
+    });
+
+    describe("with --include-deps", () => {
+      beforeEach(async () => {
+        mockIO.start();
+        try {
+          await main(cwd, cacheWithPartialCascadingChange, "exec", ["ls"], {
+            concurrency: 1,
+            filter: "all",
+            hierarchy: "all",
+            grep: "app-a",
+            includeDeps: true,
+          });
+        } finally {
+          result = mockIO.end();
+        }
+      });
+
+      it("includes all of the dependencies with the given script of the filtered packages", () => {
+        expect(getOutputs(), "to equal", [
+          "package-c: ls",
+          "package-a: ls",
+          "app-a: ls",
+        ]);
+      });
+    });
+  });
+
   describe("read", () => {
     beforeEach(async () => {
       await fs.copy(cwd, tmp);
@@ -261,7 +459,7 @@ describe("workspace-cache", () => {
 
     describe("on a cache with cascading changes", () => {
       beforeEach(async () => {
-        await main(tmp, "read", [cacheWithCascadingChange], {
+        await main(tmp, cacheWithCascadingChange, "read", [], {
           concurrency: 1,
         });
       });
@@ -273,7 +471,7 @@ describe("workspace-cache", () => {
 
     describe("on a cache with partial cascading changes", () => {
       beforeEach(async () => {
-        await main(tmp, "read", [cacheWithPartialCascadingChange], {
+        await main(tmp, cacheWithPartialCascadingChange, "read", [], {
           concurrency: 1,
         });
       });
@@ -281,13 +479,13 @@ describe("workspace-cache", () => {
       it("copies cached files into the repo", () => {
         expect(console.log, "to have calls satisfying", () => {
           console.log(
-            "../caches/with-partial-cascading-change/development/package-c/bad7f7b5128e8c6510839dca9cbc52fd058b3409da3e340d2d4aa1dac7ed9b9c/dist/index.js => packages/package-c/dist/index.js"
+            "../caches/with-partial-cascading-change/development/package-c/d13a3b760af8df0c0eb6115c9d91e69e9aedc60f6ba34f17affef0c56df03f11/dist/index.js => packages/package-c/dist/index.js"
           );
           console.log(
-            "../caches/with-partial-cascading-change/development/package-b/7b00fb1e6e1fede9e31cf43713b516cfeef733806875a8cd671df718a2e8a65f/dist => packages/package-b/dist"
+            "../caches/with-partial-cascading-change/development/package-b/2c29829c5b81e8e9f786c77315cd073f7e8c51cb6bed7756123d4681982e2937/dist => packages/package-b/dist"
           );
           console.log(
-            "../caches/with-partial-cascading-change/development/app-b/9b07a7ccce91e4bb68d2f4d624a2ada53a25bcabb02ee8a5ea5becd4853b462f/dist/index.js => apps/app-b/dist/index.js"
+            "../caches/with-partial-cascading-change/development/app-b/4505dc9761270c4133da56c04572d22650001cb722a99ed0862ad56c2e9465ee/dist/index.js => apps/app-b/dist/index.js"
           );
         });
       });
@@ -295,7 +493,7 @@ describe("workspace-cache", () => {
 
     describe("on a cache with a single change", () => {
       beforeEach(async () => {
-        await main(tmp, "read", [cacheWithSingleChange], {
+        await main(tmp, cacheWithSingleChange, "read", [], {
           concurrency: 1,
         });
       });
@@ -303,13 +501,13 @@ describe("workspace-cache", () => {
       it("copies cached files into the repo", () => {
         expect(console.log, "to have calls satisfying", () => {
           console.log(
-            "../caches/with-single-change/development/package-c/bad7f7b5128e8c6510839dca9cbc52fd058b3409da3e340d2d4aa1dac7ed9b9c/dist/index.js => packages/package-c/dist/index.js"
+            "../caches/with-single-change/development/package-c/d13a3b760af8df0c0eb6115c9d91e69e9aedc60f6ba34f17affef0c56df03f11/dist/index.js => packages/package-c/dist/index.js"
           );
           console.log(
-            "../caches/with-single-change/development/package-b/7b00fb1e6e1fede9e31cf43713b516cfeef733806875a8cd671df718a2e8a65f/dist => packages/package-b/dist"
+            "../caches/with-single-change/development/package-b/2c29829c5b81e8e9f786c77315cd073f7e8c51cb6bed7756123d4681982e2937/dist => packages/package-b/dist"
           );
           console.log(
-            "../caches/with-single-change/development/app-a/b4c4a5cce290812ef6d1d721fecfef7f6c8d8bbba21b161f28b6057e50fc1d76/dist => apps/app-a/dist"
+            "../caches/with-single-change/development/app-a/e1a5eadec3480af8072f7e13dfad12f0c246eb8e5ea48229058840dacf285d81/dist => apps/app-a/dist"
           );
         });
       });
@@ -317,7 +515,7 @@ describe("workspace-cache", () => {
 
     describe("on a cache that is in-sync", () => {
       beforeEach(async () => {
-        await main(tmp, "read", [cacheInSync], {
+        await main(tmp, cacheInSync, "read", [], {
           concurrency: 1,
         });
       });
@@ -325,16 +523,16 @@ describe("workspace-cache", () => {
       it("copies cached files into the repo", () => {
         expect(console.log, "to have calls satisfying", () => {
           console.log(
-            "../caches/in-sync/development/package-c/bad7f7b5128e8c6510839dca9cbc52fd058b3409da3e340d2d4aa1dac7ed9b9c/dist/index.js => packages/package-c/dist/index.js"
+            "../caches/in-sync/development/package-c/d13a3b760af8df0c0eb6115c9d91e69e9aedc60f6ba34f17affef0c56df03f11/dist/index.js => packages/package-c/dist/index.js"
           );
           console.log(
-            "../caches/in-sync/development/package-b/7b00fb1e6e1fede9e31cf43713b516cfeef733806875a8cd671df718a2e8a65f/dist => packages/package-b/dist"
+            "../caches/in-sync/development/package-b/2c29829c5b81e8e9f786c77315cd073f7e8c51cb6bed7756123d4681982e2937/dist => packages/package-b/dist"
           );
           console.log(
-            "../caches/in-sync/development/app-b/9b07a7ccce91e4bb68d2f4d624a2ada53a25bcabb02ee8a5ea5becd4853b462f/dist/index.js => apps/app-b/dist/index.js"
+            "../caches/in-sync/development/app-b/4505dc9761270c4133da56c04572d22650001cb722a99ed0862ad56c2e9465ee/dist/index.js => apps/app-b/dist/index.js"
           );
           console.log(
-            "../caches/in-sync/development/app-a/b4c4a5cce290812ef6d1d721fecfef7f6c8d8bbba21b161f28b6057e50fc1d76/dist => apps/app-a/dist"
+            "../caches/in-sync/development/app-a/e1a5eadec3480af8072f7e13dfad12f0c246eb8e5ea48229058840dacf285d81/dist => apps/app-a/dist"
           );
         });
       });
@@ -345,14 +543,14 @@ describe("workspace-cache", () => {
     describe("on a cache with cascading changes", () => {
       beforeEach(async () => {
         await fs.copy(cacheWithCascadingChange, tmp);
-        await main(cwd, "write", [tmp], {
+        await main(cwd, tmp, "write", [], {
           concurrency: 1,
         });
       });
 
       it("copies cached files into the repo", () => {
         console.log(
-          "packages/package-c/dist/index.js => ../tmp/development/package-c/bad7f7b5128e8c6510839dca9cbc52fd058b3409da3e340d2d4aa1dac7ed9b9c/dist/index.js"
+          "packages/package-c/dist/index.js => ../tmp/development/package-c//dist/index.js"
         );
         console.log(
           "packages/package-b/dist => ../tmp/development/package-b/7b00fb1e6e1fede9e31cf43713b516cfeef733806875a8cd671df718a2e8a65f/dist"
@@ -372,7 +570,7 @@ describe("workspace-cache", () => {
     describe("on a cache with partial cascading changes", () => {
       beforeEach(async () => {
         await fs.copy(cacheWithPartialCascadingChange, tmp);
-        await main(cwd, "write", [tmp], {
+        await main(cwd, tmp, "write", [], {
           concurrency: 1,
         });
       });
@@ -380,10 +578,10 @@ describe("workspace-cache", () => {
       it("copies cached files into the repo", () => {
         expect(console.log, "to have calls satisfying", () => {
           console.log(
-            '"Tue, 30 Jun 2020 21:10:00 GMT" => ../tmp/development/package-a/55b1498eb7de5a2a672eeeb89e72c64a4a37702c187f55b2842c20f90aca6030/timestamp.txt'
+            '"Tue, 30 Jun 2020 21:10:00 GMT" => ../tmp/development/package-a/4aeb1c73aa5bb1634e008e56e63f9d8be001be6b02cb86306bef10284e67cfb5/timestamp.txt'
           );
           console.log(
-            "apps/app-a/dist => ../tmp/development/app-a/b4c4a5cce290812ef6d1d721fecfef7f6c8d8bbba21b161f28b6057e50fc1d76/dist"
+            "apps/app-a/dist => ../tmp/development/app-a/e1a5eadec3480af8072f7e13dfad12f0c246eb8e5ea48229058840dacf285d81/dist"
           );
         });
       });
@@ -392,13 +590,13 @@ describe("workspace-cache", () => {
     describe("on a cache with a single change", () => {
       beforeEach(async () => {
         await fs.copy(cacheWithSingleChange, tmp);
-        await main(cwd, "write", [tmp], { concurrency: 1 });
+        await main(cwd, tmp, "write", [], { concurrency: 1 });
       });
 
       it("copies cached files into the repo", () => {
         expect(console.log, "to have calls satisfying", () => {
           console.log(
-            "apps/app-b/dist/index.js => ../tmp/development/app-b/9b07a7ccce91e4bb68d2f4d624a2ada53a25bcabb02ee8a5ea5becd4853b462f/dist/index.js"
+            "apps/app-b/dist/index.js => ../tmp/development/app-b/4505dc9761270c4133da56c04572d22650001cb722a99ed0862ad56c2e9465ee/dist/index.js"
           );
         });
       });
@@ -407,7 +605,7 @@ describe("workspace-cache", () => {
     describe("on a cache that is in-sync", () => {
       beforeEach(async () => {
         await fs.copy(cacheInSync, tmp);
-        await main(cwd, "write", [tmp], { concurrency: 1 });
+        await main(cwd, tmp, "write", [], { concurrency: 1 });
       });
 
       it("copies cached files into the repo", () => {
@@ -429,31 +627,31 @@ describe("workspace-cache", () => {
       await updateTimeStamps(
         beforeLimit,
         "app-a",
-        "218a7cd06af28032e0bf7ad62da76b084b0cfaa26790535b6c9bccba2a89c236"
+        "e1a5eadec3480af8072f7e13dfad12f0c246eb8e5ea48229058840dacf285d81"
       );
 
       await updateTimeStamps(
         beforeLimit,
         "package-b",
-        "32e35f4dd16831418f00b3088ce5ee27c3462e271eb82616fdf5072b11e4b87f"
+        "2c29829c5b81e8e9f786c77315cd073f7e8c51cb6bed7756123d4681982e2937"
       );
 
       await updateTimeStamps(
         afterLimit,
         "package-a",
-        "55b1498eb7de5a2a672eeeb89e72c64a4a37702c187f55b2842c20f90aca6030"
+        "4aeb1c73aa5bb1634e008e56e63f9d8be001be6b02cb86306bef10284e67cfb5"
       );
 
-      await main(cwd, "clean", [tmp], { concurrency: 1, olderThan: 8 });
+      await main(cwd, tmp, "clean", [], { concurrency: 1, olderThan: 8 });
     });
 
     it("removes old directories", () => {
       expect(console.log, "to have calls satisfying", () => {
         console.log(
-          "Removed ../tmp/development/app-a/218a7cd06af28032e0bf7ad62da76b084b0cfaa26790535b6c9bccba2a89c236"
+          "Removed ../tmp/development/app-a/e1a5eadec3480af8072f7e13dfad12f0c246eb8e5ea48229058840dacf285d81"
         );
         console.log(
-          "Removed ../tmp/development/package-b/32e35f4dd16831418f00b3088ce5ee27c3462e271eb82616fdf5072b11e4b87f"
+          "Removed ../tmp/development/package-b/2c29829c5b81e8e9f786c77315cd073f7e8c51cb6bed7756123d4681982e2937"
         );
       });
     });

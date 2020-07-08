@@ -4,6 +4,9 @@
   "description": "Test package",
   "main": "index.js",
   "private": true,
+  "scripts": {
+    "fail": "exit 1"
+  },
   "dependencies": {
     "package-c": "1.0.0"
   }
