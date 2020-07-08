@@ -237,6 +237,24 @@ describe("workspace-cache", () => {
       });
     });
 
+    describe("--grep app-?", () => {
+      beforeEach(async () => {
+        await main(cwd, cacheInSync, "list", [], {
+          concurrency: 1,
+          filter: "all",
+          hierarchy: "all",
+          grep: "app-?",
+        });
+      });
+
+      it("prints the packages that matches the given glob pattern", () => {
+        expect(console.log, "to have calls satisfying", () => {
+          console.log("app-b");
+          console.log("app-a");
+        });
+      });
+    });
+
     describe("--filter cached --hierarchy shared", () => {
       beforeEach(async () => {
         await main(cwd, cacheWithPartialCascadingChange, "list", [], {
