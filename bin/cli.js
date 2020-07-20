@@ -125,7 +125,7 @@ ensure(["all", "not-cached", "cached"].includes(options.filter));
 ensure(["all", "shared", "root"].includes(options.hierarchy));
 
 const cwd = process.cwd();
-const cacheDir = path.join(cwd, options.cache);
+const cacheDir = path.resolve(options.cache);
 
 main(cwd, cacheDir, command, args, options).catch(e => {
   console.error(e.message);
