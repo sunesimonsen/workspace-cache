@@ -87,8 +87,8 @@ describe("workspace-cache", () => {
         it("prints the packages that is cached", () => {
           expect(console.log, "to have calls satisfying", () => {
             console.log("package-c");
-            console.log("package-b");
-            console.log("app-b");
+            console.log("package-a");
+            console.log("app-a");
           });
         });
       });
@@ -165,8 +165,8 @@ describe("workspace-cache", () => {
 
         it("prints the packages that is not cached", () => {
           expect(console.log, "to have calls satisfying", () => {
-            console.log("package-a");
-            console.log("app-a");
+            console.log("package-b");
+            console.log("app-b");
           });
         });
       });
@@ -267,7 +267,7 @@ describe("workspace-cache", () => {
       it("prints the shared and cached packages", () => {
         expect(console.log, "to have calls satisfying", () => {
           console.log("package-c");
-          console.log("package-b");
+          console.log("package-a");
         });
       });
     });
