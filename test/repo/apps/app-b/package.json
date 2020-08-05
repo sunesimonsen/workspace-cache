@@ -6,7 +6,8 @@
   "license": "MIT",
   "private": true,
   "files": [
-    "./dist/index.js"
+    "./dist/index.js",
+    "duplicated.txt"
   ],
   "scripts": {
     "build": "sleep 3; rm -rf dist; mkdir -p dist; buble index.js > dist/index.js",
