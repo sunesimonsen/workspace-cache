@@ -1,2 +1,1 @@
-module.exports = function () { return "package-c"; };
-
+../../../../blobs/80e7aa39f0a5e26b7e56a304277a50e4fc79b54f1e46ebe20ed15d5abe5b4220

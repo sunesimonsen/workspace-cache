@@ -17,9 +17,10 @@
     "@transformation/core": "^1.30.2",
     "@transformation/glob": "^1.30.2",
     "chalk": "^4.1.0",
+    "debug": "^4.1.1",
     "delete-empty": "3.0.0",
     "fs-extra": "8.1.0",
-    "md5-file": "4.0.0",
+    "hasha": "^5.2.0",
     "mem": "6.0.1",
     "meow": "^7.0.1",
     "picomatch": "^2.2.2",
@@ -39,7 +40,8 @@
     "prettier": "~1.19.1",
     "sinon": "^9.0.2",
     "unexpected": "^11.14.0",
-    "unexpected-sinon": "^10.11.2"
+    "unexpected-sinon": "^10.11.2",
+    "unexpected-snapshot": "^1.0.2"
   },
   "engines": {
     "node": ">=10"
