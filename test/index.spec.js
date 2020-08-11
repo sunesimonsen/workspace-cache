@@ -359,6 +359,31 @@ describe("workspace-cache", () => {
 
       it("includes all of the dependencies with the given script of the filtered packages", () => {
         expect(getOutputs(), "to equal", [
+          "app-a: yarn run hello",
+          "package-c: yarn run hello",
+        ]);
+      });
+    });
+
+    describe("with --ordered", () => {
+      beforeEach(async () => {
+        mockIO.start();
+        try {
+          await main(cwd, cacheWithPartialCascadingChange, "run", ["hello"], {
+            concurrency: 1,
+            filter: "all",
+            hierarchy: "all",
+            grep: "app-a",
+            includeDeps: true,
+            ordered: true,
+          });
+        } finally {
+          result = mockIO.end();
+        }
+      });
+
+      it("runs scripts on packages in topological order", () => {
+        expect(getOutputs(), "to equal", [
           "package-c: yarn run hello",
           "app-a: yarn run hello",
         ]);
@@ -446,6 +471,32 @@ describe("workspace-cache", () => {
       });
 
       it("includes all of the dependencies with the given script of the filtered packages", () => {
+        expect(getOutputs(), "to equal", [
+          "app-a: ls",
+          "package-a: ls",
+          "package-c: ls",
+        ]);
+      });
+    });
+
+    describe("with --ordered", () => {
+      beforeEach(async () => {
+        mockIO.start();
+        try {
+          await main(cwd, cacheWithPartialCascadingChange, "exec", ["ls"], {
+            concurrency: 1,
+            filter: "all",
+            hierarchy: "all",
+            grep: "app-a",
+            includeDeps: true,
+            ordered: true,
+          });
+        } finally {
+          result = mockIO.end();
+        }
+      });
+
+      it("runs scripts on packages in topological order", () => {
         expect(getOutputs(), "to equal", [
           "package-c: ls",
           "package-a: ls",

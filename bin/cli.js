@@ -44,6 +44,8 @@ Commands
 
     --include-deps    runs scripts on all dependencies before the filtered packages
 
+    --ordered         runs scripts on packages in topological order
+
   exec <command>      run a shell command in each packages
 
     --filter          all: (default) all packages
@@ -57,6 +59,8 @@ Commands
     --grep            only packages which name matches the given glob pattern
 
     --include-deps    runs the shell command on all dependencies before the filtered packages
+
+    --ordered         runs the shell command on packages in topological order
 
   write               synchronizes to the cache
 
@@ -75,14 +79,16 @@ Examples
   workspace-cache list --hierarchy root
   workspace-cache list --hierarchy root --grep "@common/*"
 
-  workspace-cache run build --include-deps
-  workspace-cache run build --include-deps --filter not-cached
+  workspace-cache run build --ordered
+  workspace-cache run build --ordered --filter not-cached
   workspace-cache run test --hierarchy root
   workspace-cache run test -- -i
   workspace-cache run test --grep "*streams"
+  workspace-cache run test --include-deps --grep "*stream"
 
   workspace-cache exec ls
   workspace-cache exec -- ls -l
+  workspace-cache exec --ordered -- make
 
   workspace-cache write
 
