@@ -258,6 +258,25 @@ describe("workspace-cache", () => {
       });
     });
 
+    describe("--grep app-a --include-deps", () => {
+      beforeEach(async () => {
+        await main(cwd, cacheInSync, "list", [], {
+          concurrency: 1,
+          filter: "all",
+          hierarchy: "all",
+          grep: "app-a",
+          includeDeps: true,
+        });
+      });
+
+      it("includes all of the dependencies with the given script of the filtered packages", () => {
+        expect(console.log, "to have calls satisfying", () => {
+          console.log("package-c");
+          console.log("package-a");
+          console.log("app-a");
+        });
+      });
+    });
     describe("--filter cached --hierarchy shared", () => {
       beforeEach(async () => {
         await main(cwd, cacheWithPartialCascadingChange, "list", [], {
@@ -359,8 +378,8 @@ describe("workspace-cache", () => {
 
       it("includes all of the dependencies with the given script of the filtered packages", () => {
         expect(getOutputs(), "to equal", [
-          "app-a: yarn run hello",
           "package-c: yarn run hello",
+          "app-a: yarn run hello",
         ]);
       });
     });
@@ -472,9 +491,9 @@ describe("workspace-cache", () => {
 
       it("includes all of the dependencies with the given script of the filtered packages", () => {
         expect(getOutputs(), "to equal", [
-          "app-a: ls",
-          "package-a: ls",
           "package-c: ls",
+          "package-a: ls",
+          "app-a: ls",
         ]);
       });
     });
@@ -569,10 +588,10 @@ describe("workspace-cache", () => {
           "copy: ../caches/in-sync/development/package-c/d13a3b760af8df0c0eb6115c9d91e69e9aedc60f6ba34f17affef0c56df03f11/dist/index.js => packages/package-c/dist/index.js",
           "copy: ../caches/in-sync/development/package-b/d5c1174411acffbf1aadefc78bad0a6c12020867f878ed7692d6a2f4bcd0233d/dist => packages/package-b/dist",
           "copy: ../caches/in-sync/development/package-b/d5c1174411acffbf1aadefc78bad0a6c12020867f878ed7692d6a2f4bcd0233d/duplicated.txt => packages/package-b/duplicated.txt",
-          "copy: ../caches/in-sync/development/app-b/7a3b7f700ea444bef42538fd8073f69f65e1c980f4d03de2d5e7da36f62b2c9e/dist/index.js => apps/app-b/dist/index.js",
-          "copy: ../caches/in-sync/development/app-b/7a3b7f700ea444bef42538fd8073f69f65e1c980f4d03de2d5e7da36f62b2c9e/duplicated.txt => apps/app-b/duplicated.txt",
           "copy: ../caches/in-sync/development/app-a/21e16aae1952b5a83f9ef44ec39a0320e4b9c1689650855b7677f9df2a3f76e0/dist => apps/app-a/dist",
           "copy: ../caches/in-sync/development/app-a/21e16aae1952b5a83f9ef44ec39a0320e4b9c1689650855b7677f9df2a3f76e0/duplicated.txt => apps/app-a/duplicated.txt",
+          "copy: ../caches/in-sync/development/app-b/7a3b7f700ea444bef42538fd8073f69f65e1c980f4d03de2d5e7da36f62b2c9e/dist/index.js => apps/app-b/dist/index.js",
+          "copy: ../caches/in-sync/development/app-b/7a3b7f700ea444bef42538fd8073f69f65e1c980f4d03de2d5e7da36f62b2c9e/duplicated.txt => apps/app-b/duplicated.txt",
         ]);
       });
     });
@@ -590,13 +609,13 @@ describe("workspace-cache", () => {
       it("copies uncached files into the cache", () => {
         expect(testOutput, "to equal snapshot", [
           "link: ../tmp/development/package-c/d13a3b760af8df0c0eb6115c9d91e69e9aedc60f6ba34f17affef0c56df03f11/dist/index.js => ../tmp/blobs/80e7aa39f0a5e26b7e56a304277a50e4fc79b54f1e46ebe20ed15d5abe5b4220",
+          '"Tue, 30 Jun 2020 21:10:00 GMT" => ../tmp/development/package-a/4aeb1c73aa5bb1634e008e56e63f9d8be001be6b02cb86306bef10284e67cfb5/timestamp.txt',
           "link: ../tmp/development/package-b/d5c1174411acffbf1aadefc78bad0a6c12020867f878ed7692d6a2f4bcd0233d/dist/index.js => ../tmp/blobs/a877a788b26c25460abce5d4c86a65456e15c882f803282ff57a1293f38a7b13",
           "link: ../tmp/development/package-b/d5c1174411acffbf1aadefc78bad0a6c12020867f878ed7692d6a2f4bcd0233d/duplicated.txt => ../tmp/blobs/0910d41851f5f209dbc143a30314b6d0f5f915333aabbeb52f1479418294c058",
-          '"Tue, 30 Jun 2020 21:10:00 GMT" => ../tmp/development/package-a/4aeb1c73aa5bb1634e008e56e63f9d8be001be6b02cb86306bef10284e67cfb5/timestamp.txt',
-          "link: ../tmp/development/app-b/7a3b7f700ea444bef42538fd8073f69f65e1c980f4d03de2d5e7da36f62b2c9e/dist/index.js => ../tmp/blobs/5b99d0d1e429de070b548fcee4086a66554769f2facdebd0cdd8ac6c8f592191",
-          "link: ../tmp/development/app-b/7a3b7f700ea444bef42538fd8073f69f65e1c980f4d03de2d5e7da36f62b2c9e/duplicated.txt => ../tmp/blobs/0910d41851f5f209dbc143a30314b6d0f5f915333aabbeb52f1479418294c058",
           "link: ../tmp/development/app-a/21e16aae1952b5a83f9ef44ec39a0320e4b9c1689650855b7677f9df2a3f76e0/dist/index.js => ../tmp/blobs/190ccb0d001de2d11b26f0cd1a0162d8ba695e5105f12bf733a369b38615e83d",
           "link: ../tmp/development/app-a/21e16aae1952b5a83f9ef44ec39a0320e4b9c1689650855b7677f9df2a3f76e0/duplicated.txt => ../tmp/blobs/0910d41851f5f209dbc143a30314b6d0f5f915333aabbeb52f1479418294c058",
+          "link: ../tmp/development/app-b/7a3b7f700ea444bef42538fd8073f69f65e1c980f4d03de2d5e7da36f62b2c9e/dist/index.js => ../tmp/blobs/5b99d0d1e429de070b548fcee4086a66554769f2facdebd0cdd8ac6c8f592191",
+          "link: ../tmp/development/app-b/7a3b7f700ea444bef42538fd8073f69f65e1c980f4d03de2d5e7da36f62b2c9e/duplicated.txt => ../tmp/blobs/0910d41851f5f209dbc143a30314b6d0f5f915333aabbeb52f1479418294c058",
         ]);
       });
     });

@@ -42,6 +42,8 @@ Commands
 
     --grep            only packages which name matches the given glob pattern
 
+    --include-deps    include the dependencies for all of the matching packages
+
   run <script>        run a npm script in each packages that contains that script
 
     --filter          all: (default) all packages
