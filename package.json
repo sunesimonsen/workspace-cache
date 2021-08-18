@@ -14,7 +14,7 @@
     "preversion": "npm run lint"
   },
   "dependencies": {
-    "@transformation/core": "^1.32.0",
+    "@transformation/core": "^4.0.1",
     "@transformation/glob": "^1.32.0",
     "chalk": "^4.1.0",
     "debug": "^4.1.1",
