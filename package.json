@@ -27,7 +27,7 @@
     "supports-color": "^7.1.0"
   },
   "devDependencies": {
-    "eslint": "^6.0.0",
+    "eslint": "^7.32.0",
     "eslint-config-prettier": "^6.0.0",
     "eslint-config-standard": "^14.0.1",
     "eslint-plugin-import": "^2.18.2",
