@@ -136,7 +136,7 @@ const cwd = process.cwd();
 const cacheDir = path.resolve(options.cache);
 
 main(cwd, cacheDir, command, args, options).catch(e => {
+  console.error("-".repeat(80));
   console.error(e.message);
-  console.error(e.stack);
   process.exit(1);
 });
