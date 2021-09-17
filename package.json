@@ -14,8 +14,8 @@
     "preversion": "npm run lint"
   },
   "dependencies": {
-    "@transformation/core": "^4.0.1",
-    "@transformation/glob": "^4.0.1",
+    "@transformation/core": "^4.1.0",
+    "@transformation/glob": "^4.1.0",
     "chalk": "^4.1.0",
     "debug": "^4.1.1",
     "delete-empty": "3.0.0",
@@ -44,6 +44,6 @@
     "unexpected-snapshot": "^1.2.0"
   },
   "engines": {
-    "node": ">=10"
+    "node": ">=12"
   }
 }
