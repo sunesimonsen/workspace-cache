@@ -1,2 +1,7 @@
 node_modules
+<<<<<<< HEAD
 dist
+=======
+./test/repo
+./test/caches
+>>>>>>> f4311cd (Stop linting test data)
