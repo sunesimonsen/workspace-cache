@@ -102,7 +102,7 @@ Examples
 
 const [command, ...args] = cli.input;
 
-const ensure = condition => {
+const ensure = (condition) => {
   if (!condition) {
     console.log(cli.help);
     process.exit(1);
@@ -135,7 +135,7 @@ ensure(["all", "shared", "root"].includes(options.hierarchy));
 const cwd = process.cwd();
 const cacheDir = path.resolve(options.cache);
 
-main(cwd, cacheDir, command, args, options).catch(e => {
+main(cwd, cacheDir, command, args, options).catch((e) => {
   console.error("-".repeat(80));
   console.error(e.message);
   process.exit(1);
