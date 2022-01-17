@@ -9,6 +9,7 @@
     "workspace-cache": "./bin/cli.js"
   },
   "scripts": {
+    "format": "prettier --write '**/*.js'",
     "lint": "eslint . && prettier --check '**/*.js'",
     "test": "mocha",
     "preversion": "npm run lint"
