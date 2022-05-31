@@ -22,7 +22,7 @@
     "delete-empty": "3.0.0",
     "fs-extra": "10.0.0",
     "hasha": "^5.2.0",
-    "mem": "6.0.1",
+    "mem": "9.0.2",
     "meow": "^7.0.1",
     "picomatch": "^2.2.2",
     "supports-color": "^7.1.0"
