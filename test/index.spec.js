@@ -283,6 +283,7 @@ describe("workspace-cache", () => {
         });
       });
     });
+
     describe("--filter cached --hierarchy shared", () => {
       beforeEach(async () => {
         await main(cwd, cacheWithPartialCascadingChange, "list", [], {
@@ -296,6 +297,28 @@ describe("workspace-cache", () => {
         expect(console.log, "to have calls satisfying", () => {
           console.log("package-c");
           console.log("package-a");
+        });
+      });
+    });
+
+    describe("--filter cached --hierarchy shared --json", () => {
+      beforeEach(async () => {
+        await main(cwd, cacheWithPartialCascadingChange, "list", [], {
+          concurrency: 1,
+          filter: "cached",
+          hierarchy: "shared",
+          json: true,
+        });
+      });
+
+      it("prints the shared and cached packages", () => {
+        expect(console.log, "to have calls satisfying", () => {
+          console.log(
+            `{"name":"package-c","path":"packages/package-c/package.json"}`
+          );
+          console.log(
+            `{"name":"package-a","path":"packages/package-a/package.json"}`
+          );
         });
       });
     });

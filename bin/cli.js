@@ -32,6 +32,8 @@ Commands
 
     --include-deps    include the dependencies for all of the matching packages
 
+    --json            output JSON objects
+
   run <script>        run a npm script in each packages that contains that script
 
     --filter          all: (default) all packages
