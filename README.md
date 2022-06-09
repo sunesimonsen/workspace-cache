@@ -1,4 +1,4 @@
-## workspace-cache 
+## workspace-cache
 
 [![Build Status](https://travis-ci.org/sunesimonsen/workspace-cache.svg?branch=master)](https://travis-ci.org/sunesimonsen/workspace-cache)
 
@@ -11,7 +11,7 @@ based on the individual files in each package.
 
 ## Installation
 
-``` sh
+```sh
 npm install workspace-cache
 ```
 
@@ -43,6 +43,8 @@ Commands
     --grep            only packages which name matches the given glob pattern
 
     --include-deps    include the dependencies for all of the matching packages
+
+    --json            output JSON objects
 
   run <script>        run a npm script in each packages that contains that script
 
