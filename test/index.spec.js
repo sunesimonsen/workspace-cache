@@ -314,10 +314,10 @@ describe("workspace-cache", () => {
       it("prints the shared and cached packages", () => {
         expect(console.log, "to have calls satisfying", () => {
           console.log(
-            `{"name":"package-c","path":"packages/package-c/package.json"}`
+            `{"name":"package-c","path":"packages/package-c/package.json","dependencies":[]}`
           );
           console.log(
-            `{"name":"package-a","path":"packages/package-a/package.json"}`
+            `{"name":"package-a","path":"packages/package-a/package.json","dependencies":[{"name":"package-c","path":"packages/package-c/package.json"}]}`
           );
         });
       });
