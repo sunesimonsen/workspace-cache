@@ -3,7 +3,7 @@
   "description": "A build cache for mono repositories, that supports linked dependencies.",
   "author": "Sune Sloth Simonsen <sune@we-knowhow.dk>",
   "license": "MIT",
-  "version": "4.10.1",
+  "version": "4.10.2",
   "main": "lib/index.js",
   "bin": {
     "workspace-cache": "./bin/cli.js"
