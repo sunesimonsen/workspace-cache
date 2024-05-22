@@ -360,8 +360,8 @@ describe("workspace-cache", () => {
         expect(getOutputs(), "to equal", [
           "package-c: yarn run hello",
           "package-b: yarn run hello",
-          "app-b: yarn run hello",
           "app-a: yarn run hello",
+          "app-b: yarn run hello",
         ]);
       });
     });
@@ -383,8 +383,8 @@ describe("workspace-cache", () => {
 
       it("honors the filtering", () => {
         expect(getOutputs(), "to equal", [
-          "app-b: yarn run hello",
           "app-a: yarn run hello",
+          "app-b: yarn run hello",
         ]);
       });
     });
@@ -474,10 +474,10 @@ describe("workspace-cache", () => {
       it("runs the script in all packages with that script", () => {
         expect(getOutputs(), "to equal", [
           "package-c: ls",
-          "package-b: ls",
           "package-a: ls",
-          "app-b: ls",
+          "package-b: ls",
           "app-a: ls",
+          "app-b: ls",
         ]);
       });
     });
@@ -498,7 +498,7 @@ describe("workspace-cache", () => {
       });
 
       it("honors the filtering", () => {
-        expect(getOutputs(), "to equal", ["app-b: ls", "app-a: ls"]);
+        expect(getOutputs(), "to equal", ["app-a: ls", "app-b: ls"]);
       });
     });
 
